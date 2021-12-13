@@ -27,7 +27,6 @@ def create_heap(char_freq):
 huff_codes = {}
 def generate_codes(node):
     global huff_codes
-    # As each node will either have 0 or 2 child, we need to check only if a single child exists
     if node.left:
         node.left.code = node.code + "0"
         node.right.code = node.code + "1"
