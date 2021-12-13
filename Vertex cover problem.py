@@ -1,39 +1,31 @@
 from collections import defaultdict
+from random import randrange
+
 class Graph:
     def __init__(self):
-        self.vertex_names = set()
-        self.graph = defaultdict(list)
+        self.graph_dict = defaultdict(list)
         
-    def addEdge(self, u, v):
-        self.graph[u].append(v)
-        self.vertex_names.update({u, v})
+    def add_edge(self, node1, node2):
+        self.graph_dict[node1].append(node2)
 
-    def printVertexCover(self):
-        visited = {vert: False for vert in self.vertex_names }
-        for vert in self.vertex_names:
-            if not visited[vert]:
-                for adj in self.graph[vert]:
-                    if not visited[adj]:
-                        visited[adj] = True
-                        visited[vert] = True
-                        break
-        for vert in visited:
-            if visited[vert]:
-                print(vert, end = ' ')
-g = Graph()
-# g.addEdge(0, 1)
-# g.addEdge(0, 2)
-# g.addEdge(1, 3)
-# g.addEdge(3, 4)
-# g.addEdge(4, 5)
-# g.addEdge(5, 6)
-# g.addEdge(2, 3)
-# g.addEdge(2, 4)
-g.addEdge('a', 'b')
-g.addEdge('b', 'c')
-g.addEdge('c','d')
-g.addEdge('c','e')
-g.addEdge('e','f')
-g.addEdge('d','f')
-g.addEdge('d', 'g')
-g.printVertexCover()
+    def get_vertex_cover(self):
+        edges = [(vert1, vert2) for vert1 in self.graph_dict for vert2 in self.graph_dict[vert1]]
+        vertex_cover = []
+        while edges:
+            curr_edge = edges.pop(randrange(len(edges)))
+            vertex_cover.extend(curr_edge)
+            edges[:] = [edge for edge in edges if curr_edge[0] not in edge and curr_edge[1] not in edge]
+        return vertex_cover
+
+
+graph = Graph()
+graph.add_edge('A', 'B')
+graph.add_edge('B', 'C')
+graph.add_edge('C', 'E')
+graph.add_edge('E', 'F')
+graph.add_edge('E', 'D')
+graph.add_edge('C', 'D')
+graph.add_edge('D', 'F')
+graph.add_edge('D', 'G')
+
+print("\nVertex cover:\n", graph.get_vertex_cover())
